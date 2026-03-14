@@ -1,0 +1,52 @@
+name: CI pipeline for node and environment
+
+on:
+  workflow_dispatch:
+    inputs:
+      node-version:
+        description: "Select the node version"
+        required: true
+        default: latest
+        type: choice
+        options:
+          - latest
+          - 18
+          - 19
+          - 20
+
+      environment:
+        description: "Select the environment to deploy the project on"
+        required: true
+        default: production
+        type: choice
+        options:
+          - production
+          - dev
+          - staging
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to production
+        if: ${{ github.event.inputs.environment == 'production' }}
+        run: echo "The project is deployed in production environment"
+
+      - name: Deploy to dev
+        if: ${{ github.event.inputs.environment == 'dev' }}
+        run: echo "The project is deployed in dev environment"
+
+      - name: Deploy to staging
+        if: ${{ github.event.inputs.environment == 'staging' }}
+        run: |
+          echo "Pushing image to Docker hub"
+          docker build -t url-shortener-image:latest .
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker tag url-shortener-image:latest ${{ secrets.DOCKER_USERNAME }}/url-shortener-image:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/url-shortener-image:latest
+
