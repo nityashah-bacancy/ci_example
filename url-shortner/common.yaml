@@ -1,0 +1,54 @@
+
+x-network: &network
+  networks:
+    - url-shortener-network
+services:
+  node-container:
+    image: url-shortener-image:latest
+    ports:
+      - "3000:3000"
+    <<: *network
+    depends_on:
+      mongo-container:
+        condition: service_healthy
+      redis-container:
+        condition: service_started  
+    environment:
+      MONGO_URL: mongodb://mongo-container:27017/
+      REDIS_URL: redis://redis-container:6379/
+    profiles:
+      - dev
+      - prod
+  mongo-container:
+    image: mongo:7
+    <<: *network
+    profiles:
+      - dev
+      - prod
+    extends:
+      file: healthcheck.yaml
+      service: web
+  redis-container:
+    image: redis
+    profiles:
+      - dev
+      - prod
+    <<: *network
+  mongo-express-container:
+    image: mongo-express
+    ports:
+      - "8081:8081"
+    profiles:
+      - dev
+    <<: *network
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: root
+      ME_CONFIG_BASICAUTH_PASSWORD: 1234
+      ME_CONFIG_MONGODB_SERVER: mongo-container
+      ME_CONFIG_MONGODB_URL: mongodb://mongo-container:27017/
+    depends_on:
+      mongo-container:
+        condition: service_healthy
+
+networks:
+  url-shortener-network:

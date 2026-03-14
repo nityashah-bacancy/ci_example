@@ -1,0 +1,12 @@
+name: "url-shortener-dev" 
+services:
+  mongo-container:
+    volumes:
+      - dev-volume:/data/db
+
+
+
+
+volumes:
+  dev-volume:
+

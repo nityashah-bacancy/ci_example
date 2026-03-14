@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title>Analytics — URL Shortener</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			:root {
+				--bg1: #071125;
+				--bg2: #02131f;
+				--accent1: #8be9fd;
+				--accent2: #7c4dff;
+				--muted: rgba(255, 255, 255, 0.65);
+			}
+			* {
+				box-sizing: border-box;
+			}
+			body {
+				margin: 0;
+				min-height: 100vh;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-family: Inter, system-ui, Arial;
+				color: #eaf6ff;
+				background: linear-gradient(180deg, var(--bg1), var(--bg2));
+				padding: 28px;
+			}
+			.card {
+				width: 100%;
+				max-width: 940px;
+				background: linear-gradient(
+					180deg,
+					rgba(255, 255, 255, 0.03),
+					rgba(255, 255, 255, 0.02)
+				);
+				border-radius: 14px;
+				padding: 28px;
+				box-shadow: 0 12px 40px rgba(2, 6, 23, 0.6);
+				position: relative;
+				overflow: hidden;
+			}
+			.header {
+				display: flex;
+				align-items: center;
+				gap: 14px;
+			}
+			.logo {
+				width: 56px;
+				height: 56px;
+				border-radius: 12px;
+				background: linear-gradient(
+					135deg,
+					var(--accent1),
+					var(--accent2)
+				);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-weight: 800;
+				color: #042;
+			}
+			h1 {
+				margin: 0;
+				font-size: 18px;
+			}
+			.desc {
+				margin: 6px 0 16px;
+				color: var(--muted);
+				font-size: 13px;
+			}
+			.row {
+				display: flex;
+				gap: 16px;
+				margin-top: 14px;
+			}
+			.col {
+				flex: 1;
+			}
+			.input-group {
+				display: flex;
+				gap: 10px;
+			}
+			input#code {
+				flex: 1;
+				padding: 12px 14px;
+				border-radius: 10px;
+				border: 1px solid rgba(255, 255, 255, 0.06);
+				background: transparent;
+				color: inherit;
+				outline: none;
+			}
+			button {
+				background: linear-gradient(
+					135deg,
+					var(--accent2),
+					var(--accent1)
+				);
+				color: #051022;
+				border: none;
+				padding: 12px 14px;
+				border-radius: 10px;
+				cursor: pointer;
+				font-weight: 700;
+			}
+			.panel {
+				margin-top: 18px;
+				padding: 18px;
+				border-radius: 12px;
+				background: rgba(255, 255, 255, 0.02);
+				border: 1px solid rgba(255, 255, 255, 0.02);
+			}
+			.kpi {
+				display: flex;
+				gap: 16px;
+				align-items: center;
+				flex-wrap: wrap;
+			}
+			.kpi-item {
+				flex: 1;
+				min-width: 140px;
+				padding: 12px;
+				border-radius: 8px;
+				background: linear-gradient(
+					180deg,
+					rgba(255, 255, 255, 0.015),
+					rgba(255, 255, 255, 0.01)
+				);
+				text-align: center;
+			}
+			.kpi .num {
+				font-size: 20px;
+				font-weight: 800;
+			}
+			.muted {
+				color: var(--muted);
+				font-size: 13px;
+			}
+			a.short {
+				display: inline-block;
+				margin-top: 8px;
+				color: #e9fff9;
+				text-decoration: none;
+				background: linear-gradient(
+					90deg,
+					rgba(255, 255, 255, 0.06),
+					rgba(255, 255, 255, 0.02)
+				);
+				padding: 8px 12px;
+				border-radius: 8px;
+			}
+			.actions {
+				display: flex;
+				gap: 10px;
+				margin-top: 12px;
+			}
+			.note {
+				margin-top: 10px;
+				color: var(--muted);
+				font-size: 13px;
+			}
+			.empty {
+				color: var(--muted);
+				text-align: center;
+				padding: 22px;
+			}
+			.fade {
+				opacity: 0;
+				transform: translateY(8px);
+				transition: all 0.32s cubic-bezier(0.2, 0.9, 0.3, 1);
+			}
+			.fade.show {
+				opacity: 1;
+				transform: none;
+			}
+			.bg-blob {
+				position: absolute;
+				filter: blur(60px);
+				opacity: 0.12;
+				pointer-events: none;
+			}
+			.bg-blob.one {
+				width: 360px;
+				height: 340px;
+				left: -90px;
+				top: -60px;
+				background: linear-gradient(135deg, #7c4dff, #4bd3ff);
+			}
+			.bg-blob.two {
+				width: 280px;
+				height: 280px;
+				right: -60px;
+				bottom: -90px;
+				background: linear-gradient(135deg, #ff80bf, #7c4dff);
+				opacity: 0.06;
+			}
+			@media (max-width: 760px) {
+				.row {
+					flex-direction: column;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="card">
+			<div class="bg-blob one" aria-hidden></div>
+			<div class="bg-blob two" aria-hidden></div>
+
+			<div class="header">
+				<div class="logo">U</div>
+				<div>
+					<h1>Link Analytics</h1>
+					<div class="desc">
+						Enter a short code (or supply via ?code=) to see clicks
+						and metadata.
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col">
+					<div class="input-group">
+						<input
+							id="code"
+							placeholder="Enter short code (e.g. a1B2c3)"
+							aria-label="Short code"
+						/>
+						<button id="fetchBtn">Fetch</button>
+					</div>
+					<div class="panel fade" id="panel">
+						<div id="content" class="empty">
+							No data loaded yet.
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			const q = new URLSearchParams(location.search).get("code");
+			const codeInput = document.getElementById("code");
+			const fetchBtn = document.getElementById("fetchBtn");
+			const panel = document.getElementById("panel");
+			const content = document.getElementById("content");
+
+			if (q) {
+				codeInput.value = q;
+				fetchAnalytics(q);
+			}
+
+			fetchBtn.addEventListener("click", () => {
+				const c = codeInput.value.trim();
+				if (!c) return flashEmpty();
+				fetchAnalytics(c);
+			});
+
+			async function fetchAnalytics(code) {
+				content.innerHTML = "Loading...";
+				panel.classList.remove("show");
+				try {
+					const res = await fetch(
+						"/analytics/" + encodeURIComponent(code),
+					);
+					if (res.status === 404) {
+						content.innerHTML =
+							'<div class="empty">No record found for <strong>' +
+							escapeHtml(code) +
+							"</strong>.</div>";
+						panel.classList.add("show");
+						return;
+					}
+					const data = await res.json();
+
+					const created = new Date(data.createdAt).toLocaleString();
+					const updated = new Date(data.updatedAt).toLocaleString();
+
+					content.innerHTML = `
+          <div>
+            <div class="muted">Original URL</div>
+            <div><a class="short" href="${escapeAttr(data.originalUrl)}" target="_blank">${escapeHtml(data.originalUrl)}</a></div>
+            <div class="muted">Short URL</div>
+            <div><a class="short" href="http://localhost:3000/${escapeHtml(data.shortCode)}" target="_blank">http://localhost:3000/${escapeHtml(data.shortCode)}</a></div>
+
+            <div class="kpi" style="margin-top:12px">
+              <div class="kpi-item"><div class="num">${data.clicks ?? 0}</div><div class="muted">Clicks</div></div>
+              <div class="kpi-item"><div class="num">${created}</div><div class="muted">Created</div></div>
+              <div class="kpi-item"><div class="num">${updated}</div><div class="muted">Last updated</div></div>
+            </div>
+
+            <div class="actions">
+              <button id="copyBtn">Copy Short URL</button>
+              <button id="openBtn">Open Original</button>
+            </div>
+            <div class="note">Tip: add <code>?code=${escapeHtml(data.shortCode)}</code> to this page URL to load directly.</div>
+          </div>
+        `;
+
+					panel.classList.add("show");
+
+					document
+						.getElementById("copyBtn")
+						.addEventListener("click", () => {
+							navigator.clipboard.writeText(
+								"http://localhost:3000/" + data.shortCode,
+							);
+						});
+
+					document
+						.getElementById("openBtn")
+						.addEventListener("click", () => {
+							window.open(data.originalUrl, "_blank");
+						});
+				} catch (err) {
+					content.innerHTML =
+						'<div class="empty">Error fetching analytics.</div>';
+					panel.classList.add("show");
+					console.error(err);
+				}
+			}
+
+			function flashEmpty() {
+				content.innerHTML =
+					'<div class="empty">Please enter a short code.</div>';
+				panel.classList.add("show");
+			}
+
+			function escapeHtml(s) {
+				return String(s).replace(
+					/[&<>"']/g,
+					(c) =>
+						({
+							"&": "&amp;",
+							"<": "&lt;",
+							">": "&gt;",
+							'"': "&quot;",
+							"'": "&#39;",
+						})[c],
+				);
+			}
+			function escapeAttr(s) {
+				return String(s).replace(/"/g, "&quot;");
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,12 @@
+name: "url-shortener-prod" 
+services:
+  mongo-container:
+    volumes:
+      - prod-volume:/data/db
+
+
+
+
+
+volumes:
+  prod-volume:
