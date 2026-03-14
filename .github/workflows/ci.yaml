@@ -45,7 +45,7 @@ jobs:
         if: ${{ github.event.inputs.environment == 'staging' }}
         run: |
           echo "Pushing image to Docker hub"
-          docker build -t url-shortener-image:latest ./url-shortner
+          docker build -t url-shortener-image:latest .
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker tag url-shortener-image:latest ${{ secrets.DOCKER_USERNAME }}/url-shortener-image:latest
           docker push ${{ secrets.DOCKER_USERNAME }}/url-shortener-image:latest
