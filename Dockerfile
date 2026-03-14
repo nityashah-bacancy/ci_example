@@ -2,11 +2,11 @@ FROM node
 
 WORKDIR /app
 
-COPY app/package.json .
+COPY ./url-shortner/app/package.json .
 
 RUN npm install
 
-COPY app/ .
+COPY ./url-shortner/app/ .
 
 EXPOSE 3000
 
