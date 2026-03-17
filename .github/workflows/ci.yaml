@@ -17,7 +17,7 @@ on:
       environment:
         description: "Select the environment to deploy the project on"
         required: true
-        default: production
+        default: 
         type: choice
         options:
           - production
@@ -34,11 +34,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Deploy to production
-        if: ${{ github.event.inputs.environment == 'production' }}
+        if: ${{ inputs.environment == 'production' }}
         run: echo "The project is deployed in production environment"
 
       - name: Deploy to dev
-        if: ${{ github.event.inputs.environment == 'dev' }}
+        if: ${{ inputs.environment == 'dev' }}
         run: echo "The project is deployed in dev environment"
 
       - name: Deploy to staging
