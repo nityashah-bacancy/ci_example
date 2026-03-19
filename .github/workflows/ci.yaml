@@ -39,6 +39,8 @@ jobs:
 
       - name: Deploy to production
         if: ${{ inputs.environment == 'production' }}
+        run: echo true condition
+
       - name: Print Work Space
         run: | 
           echo "The project is deployed in production environment"
