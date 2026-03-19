@@ -41,8 +41,8 @@ jobs:
         if: ${{ inputs.environment == 'production' }}
       - name: Print Work Space
         run: | 
-        echo "The project is deployed in production environment"
-        echo $GITHUB_WORKSPACE
+          echo "The project is deployed in production environment"
+          echo $GITHUB_WORKSPACE
 
       - name: Deploy to dev
         if: ${{ inputs.environment == 'dev' }}
