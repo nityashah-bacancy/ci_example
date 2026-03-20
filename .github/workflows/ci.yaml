@@ -20,6 +20,7 @@ on:
         default: 
         type: choice
         options:
+          - mine 
           - production
           - dev
           - staging
@@ -36,7 +37,17 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v4
+  
+      - name: running npm build and generating the output
+        run: |
+          cd chatApp/frontend
+          ls 
+          npm run build
 
+      - name: inspecting folder
+        run: |
+          cd chatApp/frontend
+          ls 
       - name: Deploy to production
         if: ${{ inputs.environment == 'production' }}
         run: echo true condition
