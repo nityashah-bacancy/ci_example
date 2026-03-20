@@ -1,0 +1,21 @@
+services:
+  frontend:
+    image: nityshah/frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+  backend:
+    image: nityshah/backend
+    ports:
+     - "5001:5001"
+    environment:
+    - MONGODB_URI=${MONGODB_URI}
+    - PORT=${PORT}
+    - JWT_SECRET=${JWT_SECRET}
+    - NODE_ENV=${NODE_ENV}
+    - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+    - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+    - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+
