@@ -42,6 +42,7 @@ jobs:
         run: |
           cd chatApp/frontend
           ls 
+          npm install
           npm run build
 
       - name: inspecting folder
